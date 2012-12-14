@@ -127,6 +127,29 @@ namespace EmptyGrammarAlg
         }
 
         /// <summary>
+        /// Sets the flags to the desired state if the coresponding change flag is set
+        /// </summary>
+        /// <param name="changeVisited"></param>
+        /// <param name="visitedTo"></param>
+        /// <param name="changeMarkedForDeletion"></param>
+        /// <param name="markedForDeletionTo"></param>
+        private void SetFlagsForAllProductions(bool changeVisited = true, bool visitedTo = false, bool changeMarkedForDeletion = false, bool markedForDeletionTo = false)
+        {
+            // Step through each production in the grammar
+            for (int i = 0; i < grammar.Count; i++)
+            {
+                if (changeVisited)
+                {
+                    grammar.ElementAt(i).visited = visitedTo;
+                }
+                if (changeMarkedForDeletion)
+                {
+                    grammar.ElementAt(i).markedForDeletion = markedForDeletionTo;
+                }
+            }
+        }
+
+        /// <summary>
         /// If the right hand side of a production is empty then mark for deletion
         /// </summary>
         private void MarkEmptyForDeletion()

@@ -24,7 +24,7 @@ namespace EmptyGrammarAlg
             foreach (Production production in grammar)
             {
                 // Terminals are saved as productions but only displayed if SHOW_DEBUG flag is set
-                if (!production.isTerminal || SHOW_DEBUG)
+                if (!production.isTerminal || SHOW_DEBUG || Char.IsUpper(production.variable[0]))
                 {
                     string left = production.variable + " --> ";
                     string right = "";
@@ -34,14 +34,19 @@ namespace EmptyGrammarAlg
                         // Read each element of the or block
                         foreach (var str in innerList)
                         {
-                            right += str;
+                            right += str + " ";
                         }
-                        right += "|";
+                        // remove the last dot symbol before the or symbol
+                        if (right.Length > 0)
+                        {
+                            right = right.Remove(right.Length - 1, 1);
+                        }
+                        right += " | ";
                     }
                     // remove the last or symbol from right
-                    if (right.Length > 0)
+                    if (right.Length > 2)
                     {
-                        right = right.Remove(right.Length - 1, 1);
+                        right = right.Remove(right.Length - 3, 3);
                     }
                     Output(left + right);
                 }

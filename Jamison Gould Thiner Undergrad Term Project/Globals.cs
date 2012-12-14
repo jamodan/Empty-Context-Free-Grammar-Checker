@@ -19,7 +19,7 @@ namespace EmptyGrammarAlg
         // Environment Variables
         public const int TEST_DATA_SET = 0;
         public const bool SHOW_ERROR = true;
-        public const bool SHOW_DEBUG = true;
+        public const bool SHOW_DEBUG = false;
         public const int DEBUG_LEVEL = int.MaxValue;
         public bool showAsDebug = false;
         public int showDebugAsLevel = 0;
