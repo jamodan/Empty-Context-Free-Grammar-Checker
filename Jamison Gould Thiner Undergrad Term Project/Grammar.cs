@@ -127,46 +127,6 @@ namespace EmptyGrammarAlg
         }
 
         /// <summary>
-        /// Groups variables into groups of two variables
-        /// </summary>
-        private void GroupVariablesIntoTwo()
-        {
-            // Step through each production in the grammar
-            for (int i = 0; i < grammar.Count; i++)
-            {
-                // Step through each or-block in the production
-                for (int j = 0; j < grammar.ElementAt(i).productionList.Count; j++)
-                {
-                    // while the or-block has more than two strings
-                    while (grammar.ElementAt(i).productionList.ElementAt(j).Count > 2)
-                    {
-                        // create a new production and add to grammar
-                        var tempVariable = GenerateVariableNameForChomsky();
-                        var tempProduction = new Production(tempVariable);
-                        var tempList = new List<string>();
-                        tempList.Add(grammar.ElementAt(i).productionList.ElementAt(j).ElementAt(0));
-                        tempList.Add(grammar.ElementAt(i).productionList.ElementAt(j).ElementAt(1));
-                        tempProduction.productionList.Add(tempList);
-                        grammar.Add(tempProduction);
-
-                        // modify or-block
-                        grammar.ElementAt(i).productionList.ElementAt(j).RemoveRange(0, 2);
-                        grammar.ElementAt(i).productionList.ElementAt(j).Insert(0, tempVariable);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Generates a name for a variable created to group two other variables in Chomsky Normal Form
-        /// </summary>
-        static int count = 0;
-        private static string GenerateVariableNameForChomsky()
-        {
-            return "_" + (char)((int)'A' + count / 26) + (count++ % 10).ToString();
-        }
-
-        /// <summary>
         /// Sets the flags to the desired state if the coresponding change flag is set
         /// </summary>
         /// <param name="changeVisited"></param>
@@ -190,6 +150,31 @@ namespace EmptyGrammarAlg
         }
 
         /// <summary>
+        /// Finds Productions that only point to one other production, if found mark for removal and set replacement variable to the right hand side
+        /// </summary>
+        private void MarkVariableToSingleVariableForReplacement()
+        {
+            foreach (Production production in grammar)
+            {
+                if (!Char.IsLower(production.variable[0]) && production.variable[0] != '~' && production.productionList.Count == 1)
+                {
+                    var orBlock = production.productionList.ElementAt(0);
+                    if (orBlock.Count == 1)
+                    {
+                        string temp = orBlock.ElementAt(0);
+                        if (!Char.IsLower(temp[0]) && temp[0] != '~')
+                        {
+                            production.markedForDeletion = true;
+                            production.replacementVariable = temp;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ReplaceSingleVariableOrBlocks
+
+        /// <summary>
         /// If the right hand side of a production is empty then mark for deletion
         /// </summary>
         private void MarkEmptyForDeletion()
@@ -201,6 +186,18 @@ namespace EmptyGrammarAlg
                 if (production.productionList.Count == 0)
                 {
                     production.markedForDeletion = true;
+                }
+                else if (production.productionList.Count == 1)
+                {
+                    var orBlock = production.productionList.ElementAt(0);
+                    if (orBlock.Count == 1)
+                    {
+                        string right = orBlock.ElementAt(0);
+                        if (right.Equals(production.variable))
+                        {
+                            production.markedForDeletion = true;
+                        }
+                    }
                 }
             }
         }
@@ -452,7 +449,7 @@ namespace EmptyGrammarAlg
         }
 
         /// <summary>
-        /// Determines weather or not a Production exists in the grammar
+        /// Determins weather or not a Production exists in the grammar
         /// </summary>
         /// <param name="variable">Production to search for</param>
         /// <returns>True if the Production exits in the grammar, false otherwise</returns>
