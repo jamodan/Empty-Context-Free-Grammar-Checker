@@ -64,7 +64,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Globals.cs" />
-    <Compile Include="Grammar.cs" />
+    <Compile Include="..\..\..\..\Desktop\Grammar.cs">
+      <Link>Grammar.cs</Link>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

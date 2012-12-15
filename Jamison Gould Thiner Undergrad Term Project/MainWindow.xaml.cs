@@ -60,6 +60,7 @@ namespace EmptyGrammarAlg
 
                     case 4: // Remove lamda transitions. if we can just cut them out do this first, also would then have to test for empty productions after removal
                         //RemoveLambda();
+                        GroupVariablesIntoTwo();
                         MarkEmptyForDeletion();
                         PrepareForDeletion();
                         DeleteProductions();
