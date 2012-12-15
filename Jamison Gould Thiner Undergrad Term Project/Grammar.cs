@@ -150,6 +150,29 @@ namespace EmptyGrammarAlg
         }
 
         /// <summary>
+        /// Finds Productions that only point to one other production, if found mark for removal and set replacement variable to the right hand side
+        /// </summary>
+        private void MarkVariableToSingleVariableForReplacement()
+        {
+            foreach (Production production in grammar)
+            {
+                if (!Char.IsLower(production.variable[0]) && production.variable[0] != '~' && production.productionList.Count == 1)
+                {
+                    var orBlock = production.productionList.ElementAt(0);
+                    if (orBlock.Count == 1)
+                    {
+                        string temp = orBlock.ElementAt(0);
+                        if (!Char.IsLower(temp[0]) && temp[0] != '~')
+                        {
+                            production.markedForDeletion = true;
+                            production.replacementVariable = temp;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// If the right hand side of a production is empty then mark for deletion
         /// </summary>
         private void MarkEmptyForDeletion()

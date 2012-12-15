@@ -67,6 +67,7 @@ namespace EmptyGrammarAlg
 
                     case 5: // Remove useless transitions recursivley but still allow stepping by decrementing step in the function if one is found and removed
                         // MarkUselessTransitionsForDeletion();
+                        MarkVariableToSingleVariableForReplacement();
                         PrepareForDeletion();
                         DeleteProductions();
                         break;
