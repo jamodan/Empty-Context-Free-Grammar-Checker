@@ -162,6 +162,18 @@ namespace EmptyGrammarAlg
                 {
                     production.markedForDeletion = true;
                 }
+                else if (production.productionList.Count == 1)
+                {
+                    var orBlock = production.productionList.ElementAt(0);
+                    if (orBlock.Count == 1)
+                    {
+                        string right = orBlock.ElementAt(0);
+                        if (right.Equals(production.variable))
+                        {
+                            production.markedForDeletion = true;
+                        }
+                    }
+                }
             }
         }
 
